@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arcade Central | Free Games</title>
+  <title>Arcade Zone | Free Unblocked Games</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -64,7 +64,7 @@
     .card-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.25rem; }
     .card-tag { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* Game Modal */
+    /* Game Modal Window */
     .modal {
       display: none;
       position: fixed;
@@ -103,7 +103,8 @@
   </header>
 
   <div class="grid" id="gameGrid">
-    <!-- Game Card 1 -->
+    
+    <!-- Game 1: 2048 -->
     <div class="card" onclick="openGame('https://html5.gamedistribution.com/rvvAS300/a31b63dd24544e39b7431e7c53696a41/', '2048')">
       <img src="https://img.gamedistribution.com/a31b63dd24544e39b7431e7c53696a41-512x512.jpeg" alt="2048" />
       <div class="card-body">
@@ -112,7 +113,7 @@
       </div>
     </div>
 
-    <!-- Game Card 2 -->
+    <!-- Game 2: Moto X3M -->
     <div class="card" onclick="openGame('https://html5.gamedistribution.com/rvvAS300/6b731e84361e405a8f4c28f9d0c2e391/', 'Moto X3M')">
       <img src="https://img.gamedistribution.com/6b731e84361e405a8f4c28f9d0c2e391-512x512.jpeg" alt="Moto X3M" />
       <div class="card-body">
@@ -120,6 +121,16 @@
         <div class="card-tag">Racing</div>
       </div>
     </div>
+
+    <!-- Game 3: Tic Tac Toe -->
+    <div class="card" onclick="openGame('https://html5.gamedistribution.com/rvvAS300/5123d4bb1b1c4c9fa30f40d16c52a065/', 'Tic Tac Toe')">
+      <img src="https://img.gamedistribution.com/5123d4bb1b1c4c9fa30f40d16c52a065-512x512.jpeg" alt="Tic Tac Toe" />
+      <div class="card-body">
+        <div class="card-title">Tic Tac Toe</div>
+        <div class="card-tag">Strategy</div>
+      </div>
+    </div>
+
   </div>
 
   <!-- Player Modal -->
