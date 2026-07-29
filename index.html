@@ -2,222 +2,216 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arcade Zone | Unblocked Games</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crazy Mouse Battle</title>
   <style>
-    :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --accent: #6366f1;
-      --text: #f8fafc;
-      --muted: #94a3b8;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0f172a;
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
-    body { background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem; }
-    
-    header { text-align: center; margin-bottom: 2rem; }
-    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--accent); }
-    p { color: var(--muted); }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1.5rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 1.5rem;
+    #ui {
+      margin-bottom: 10px;
       text-align: center;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      border: 1px solid #334155;
     }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-    }
-    .card-title { font-weight: bold; font-size: 1.3rem; margin-bottom: 0.5rem; }
-    .card-tag { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
-
-    /* Modal Overlay */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
-      align-items: center; justify-content: center;
-      z-index: 100;
-    }
-    .modal-content {
-      background: var(--card-bg);
-      padding: 1rem;
+    h1 { color: #6366f1; margin-bottom: 4px; font-size: 1.8rem; }
+    p { color: #94a3b8; font-size: 0.9rem; }
+    canvas {
+      background: #1e293b;
+      border: 2px solid #334155;
       border-radius: 12px;
-      display: flex; flex-direction: column; align-items: center;
-      border: 1px solid #334155;
-      width: 90%; max-width: 900px; height: 80vh;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      cursor: crosshair;
     }
-    .modal-header {
-      width: 100%; display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 0.5rem; padding-bottom: 0.5rem;
-      border-bottom: 1px solid #334155;
-    }
-    .close-btn {
-      background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;
-    }
-    #gameContainer {
-      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden;
-    }
-    iframe { width: 100%; height: 100%; border: none; border-radius: 8px; background: #000; }
-    canvas { background: #000; border-radius: 8px; max-width: 100%; }
-
-    /* Tic-Tac-Toe Grid Styling */
-    #tttBoard {
-      display: grid; grid-template-columns: repeat(3, 90px); gap: 8px;
-    }
-    .ttt-cell {
-      width: 90px; height: 90px; background: #334155; display: flex;
-      align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold;
-      cursor: pointer; border-radius: 8px; user-select: none;
-    }
-    .ttt-cell:hover { background: #475569; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Arcade Zone</h1>
-    <p>Select a game to start playing</p>
-  </header>
-
-  <div class="grid">
-
-    <!-- Game 1: Your Construct 3 Game -->
-    <div class="card" onclick="openIframe('./New%20project/index.html', 'My Construct 3 Game')">
-      <div class="card-title">🚀 Construct 3 Game</div>
-      <div class="card-tag">Custom Game</div>
-    </div>
-
-    <!-- Game 2: Clumsy Bird -->
-    <div class="card" onclick="openIframe('https://ellisonleao.github.io/clumsy-bird/', 'Clumsy Bird')">
-      <div class="card-title">🐦 Clumsy Bird</div>
-      <div class="card-tag">Arcade</div>
-    </div>
-
-    <!-- Game 3: Snake (Built-in) -->
-    <div class="card" onclick="startSnake()">
-      <div class="card-title">🐍 Snake</div>
-      <div class="card-tag">Built-In (No Blocking)</div>
-    </div>
-
-    <!-- Game 4: Tic-Tac-Toe (Built-in) -->
-    <div class="card" onclick="startTTT()">
-      <div class="card-title">❌ Tic-Tac-Toe</div>
-      <div class="card-tag">2-Player Local</div>
-    </div>
-
+  <div id="ui">
+    <h1>🐭 Crazy Mouse Battle</h1>
+    <p>Move your mouse to control the Player. Click to Attack enemy mice!</p>
+    <p id="scoreBoard" style="margin-top: 6px; font-size: 1.1rem; font-weight: bold; color: #10b981;">Score: 0 | Health: 100</p>
   </div>
 
-  <!-- Player Modal -->
-  <div class="modal" id="gameModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span id="modalTitle" style="font-weight: bold; font-size: 1.2rem;">Game</span>
-        <button class="close-btn" onclick="closeGame()">&times;</button>
-      </div>
-      <div id="gameContainer"></div>
-    </div>
-  </div>
+  <canvas id="gameCanvas" width="600" height="400"></canvas>
 
   <script>
-    let gameInterval = null;
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreBoard = document.getElementById('scoreBoard');
 
-    function closeGame() {
-      if (gameInterval) clearInterval(gameInterval);
-      document.getElementById('gameContainer').innerHTML = '';
-      document.getElementById('gameModal').style.display = 'none';
-    }
+    let score = 0;
+    let health = 100;
+    let gameOver = false;
 
-    // Opens external / hosted games in an iframe
-    function openIframe(url, title) {
-      document.getElementById('modalTitle').innerText = title;
-      document.getElementById('gameContainer').innerHTML = `<iframe src="${url}"></iframe>`;
-      document.getElementById('gameModal').style.display = 'flex';
-    }
+    // Player position follows mouse
+    const player = { x: 300, y: 200, radius: 15, color: '#6366f1' };
+    const mousePos = { x: 300, y: 200 };
 
-    /* --- BUILT-IN GAME 1: SNAKE --- */
-    function startSnake() {
-      document.getElementById('modalTitle').innerText = 'Snake (Use Arrow Keys)';
-      document.getElementById('gameContainer').innerHTML = '<canvas id="snakeCanvas" width="400" height="400"></canvas>';
-      document.getElementById('gameModal').style.display = 'flex';
+    // Enemies (Crazy Mice)
+    const enemies = [];
+    const attacks = [];
 
-      const canvas = document.getElementById('snakeCanvas');
-      const ctx = canvas.getContext('2d');
-      let px = 10, py = 10, gs = 20, tc = 20, ax = 15, ay = 15, xv = 0, yv = 0;
-      let trail = [], tail = 5;
+    // Track mouse movement
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mousePos.x = e.clientX - rect.left;
+      mousePos.y = e.clientY - rect.top;
+    });
 
-      document.onkeydown = function(e) {
-        if(e.keyCode===37 && xv!==1) { xv=-1; yv=0; }
-        if(e.keyCode===38 && yv!==1) { xv=0; yv=-1; }
-        if(e.keyCode===39 && xv!==-1) { xv=1; yv=0; }
-        if(e.keyCode===40 && yv!==-1) { xv=0; yv=1; }
-      };
-
-      if (gameInterval) clearInterval(gameInterval);
-      gameInterval = setInterval(function() {
-        px += xv; py += yv;
-        if(px < 0) px = tc-1; if(px > tc-1) px = 0;
-        if(py < 0) py = tc-1; if(py > tc-1) py = 0;
-
-        ctx.fillStyle = "#0f172a"; ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "#10b981";
-        for(let i=0; i<trail.length; i++) {
-          ctx.fillRect(trail[i].x*gs, trail[i].y*gs, gs-2, gs-2);
-          if(trail[i].x===px && trail[i].y===py) tail = 5;
-        }
-        trail.push({x:px, y:py});
-        while(trail.length > tail) trail.shift();
-
-        if(ax===px && ay===py) {
-          tail++;
-          ax = Math.floor(Math.random()*tc);
-          ay = Math.floor(Math.random()*tc);
-        }
-        ctx.fillStyle = "#ef4444";
-        ctx.fillRect(ax*gs, ay*gs, gs-2, gs-2);
-      }, 1000/15);
-    }
-
-    /* --- BUILT-IN GAME 2: TIC-TAC-TOE --- */
-    function startTTT() {
-      document.getElementById('modalTitle').innerText = 'Tic-Tac-Toe';
-      document.getElementById('gameContainer').innerHTML = '<div id="tttBoard"></div>';
-      document.getElementById('gameModal').style.display = 'flex';
-
-      const board = document.getElementById('tttBoard');
-      let turn = 'X', cells = Array(9).fill('');
-
-      function render() {
-        board.innerHTML = '';
-        cells.forEach((val, idx) => {
-          const div = document.createElement('div');
-          div.className = 'ttt-cell';
-          div.innerText = val;
-          div.onclick = () => {
-            if(!cells[idx]) {
-              cells[idx] = turn;
-              turn = turn === 'X' ? 'O' : 'X';
-              render();
-            }
-          };
-          board.appendChild(div);
-        });
+    // Click to attack
+    canvas.addEventListener('click', () => {
+      if (gameOver) {
+        restartGame();
+        return;
       }
-      render();
+      attacks.push({
+        x: player.x,
+        y: player.y,
+        radius: 5,
+        maxRadius: 40,
+        color: '#38bdf8'
+      });
+    });
+
+    // Spawn Enemy Mouse
+    function spawnEnemy() {
+      if (gameOver) return;
+      const radius = 12;
+      let x, y;
+      if (Math.random() < 0.5) {
+        x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius;
+        y = Math.random() * canvas.height;
+      } else {
+        x = Math.random() * canvas.width;
+        y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius;
+      }
+      enemies.push({ x, y, radius, speed: 1.5 + Math.random() * 1.5, color: '#ef4444' });
     }
+
+    setInterval(spawnEnemy, 1000);
+
+    function restartGame() {
+      score = 0;
+      health = 100;
+      enemies.length = 0;
+      attacks.length = 0;
+      gameOver = false;
+      animate();
+    }
+
+    function update() {
+      if (gameOver) return;
+
+      // Smoothly move player to mouse cursor
+      player.x += (mousePos.x - player.x) * 0.15;
+      player.y += (mousePos.y - player.y) * 0.15;
+
+      // Update attacks
+      for (let i = attacks.length - 1; i >= 0; i--) {
+        const a = attacks[i];
+        a.radius += 3;
+        if (a.radius > a.maxRadius) {
+          attacks.splice(i, 1);
+        }
+      }
+
+      // Update enemies
+      for (let i = enemies.length - 1; i >= 0; i--) {
+        const e = enemies[i];
+
+        // Move towards player
+        const dx = player.x - e.x;
+        const dy = player.y - e.y;
+        const dist = Math.hypot(dx, dy);
+
+        e.x += (dx / dist) * e.speed;
+        e.y += (dy / dist) * e.speed;
+
+        // Check attack hits enemy
+        for (let j = attacks.length - 1; j >= 0; j--) {
+          const a = attacks[j];
+          const hitDist = Math.hypot(a.x - e.x, a.y - e.y);
+          if (hitDist < a.radius + e.radius) {
+            enemies.splice(i, 1);
+            score += 10;
+            break;
+          }
+        }
+
+        // Check enemy hits player
+        if (dist < player.radius + e.radius) {
+          health -= 10;
+          enemies.splice(i, 1);
+          if (health <= 0) {
+            health = 0;
+            gameOver = true;
+          }
+        }
+      }
+
+      scoreBoard.innerText = `Score: ${score} | Health: ${health}`;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw Attacks
+      attacks.forEach(a => {
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, a.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = a.color;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      });
+
+      // Draw Player Mouse
+      ctx.beginPath();
+      ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+      ctx.fillStyle = player.color;
+      ctx.fill();
+
+      // Draw Enemies
+      enemies.forEach(e => {
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+        ctx.fillStyle = e.color;
+        ctx.fill();
+      });
+
+      // Game Over Screen
+      if (gameOver) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = '#ef4444';
+        ctx.font = 'bold 30px system-ui';
+        ctx.textAlign = 'center';
+        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
+
+        ctx.fillStyle = '#fff';
+        ctx.font = '18px system-ui';
+        ctx.fillText(`Final Score: ${score}`, canvas.width / 2, canvas.height / 2 + 25);
+        ctx.fillText('Click anywhere to restart', canvas.width / 2, canvas.height / 2 + 55);
+      }
+    }
+
+    function animate() {
+      update();
+      draw();
+      if (!gameOver) {
+        requestAnimationFrame(animate);
+      }
+    }
+
+    animate();
   </script>
 </body>
 </html>
