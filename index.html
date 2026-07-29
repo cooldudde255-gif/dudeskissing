@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Arcade Zone | Verified Unblocked Games</title>
+  <title>Arcade Zone | Built-In Unblocked Games</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -19,34 +19,19 @@
     h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--accent); }
     p { color: var(--muted); }
 
-    .search-box {
-      max-width: 500px;
-      margin: 1.5rem auto;
-      display: flex;
-    }
-    .search-box input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      background: var(--card-bg);
-      color: #fff;
-      font-size: 1rem;
-      outline: none;
-    }
-
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 1.5rem;
-      max-width: 1200px;
+      max-width: 900px;
       margin: 0 auto;
     }
 
     .card {
       background: var(--card-bg);
       border-radius: 12px;
-      overflow: hidden;
+      padding: 1.5rem;
+      text-align: center;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
       border: 1px solid #334155;
@@ -55,16 +40,10 @@
       transform: translateY(-4px);
       box-shadow: 0 10px 20px rgba(0,0,0,0.4);
     }
-    .card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-    }
-    .card-body { padding: 1rem; }
-    .card-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.25rem; }
-    .card-tag { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
+    .card-title { font-weight: bold; font-size: 1.4rem; margin-bottom: 0.5rem; }
+    .card-tag { font-size: 0.85rem; color: var(--accent); text-transform: uppercase; }
 
-    /* Modal Overlay */
+    /* Modal Player Overlay */
     .modal {
       display: none;
       position: fixed;
@@ -75,121 +54,180 @@
     }
     .modal-content {
       background: var(--card-bg);
-      width: 90%; max-width: 900px;
-      height: 80vh;
+      padding: 1.5rem;
       border-radius: 12px;
-      display: flex; flex-direction: column;
-      overflow: hidden;
+      display: flex; flex-direction: column; align-items: center;
+      border: 1px solid #334155;
+      max-width: 500px; width: 90%;
     }
     .modal-header {
-      padding: 0.75rem 1rem;
-      display: flex; justify-content: space-between; align-items: center;
-      border-bottom: 1px solid #334155;
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1rem;
     }
     .close-btn {
       background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;
     }
-    iframe { width: 100%; height: 100%; border: none; }
+    canvas { background: #000; border-radius: 8px; max-width: 100%; }
+
+    /* Tic-Tac-Toe Grid */
+    #tttBoard {
+      display: grid; grid-template-columns: repeat(3, 90px); gap: 5px; margin-top: 10px;
+    }
+    .ttt-cell {
+      width: 90px; height: 90px; background: #334155; display: flex;
+      align-items: center; justify-content: center; font-size: 2rem; font-weight: bold;
+      cursor: pointer; border-radius: 6px;
+    }
   </style>
 </head>
 <body>
 
   <header>
     <h1>Arcade Zone</h1>
-    <p>Select a game to start playing instantly</p>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="Search games..." onkeyup="filterGames()" />
-    </div>
+    <p>All games hosted 100% inside your site (No external sources)</p>
   </header>
 
-  <div class="grid" id="gameGrid">
-
-    <!-- Game 1: Clumsy Bird -->
-    <div class="card" onclick="openGame('https://ellisonleao.github.io/clumsy-bird/', 'Clumsy Bird')">
-      <img src="https://raw.githubusercontent.com/ellisonleao/clumsy-bird/master/data/img/bg.png" alt="Clumsy Bird" />
-      <div class="card-body">
-        <div class="card-title">Clumsy Bird</div>
-        <div class="card-tag">Arcade</div>
-      </div>
+  <div class="grid">
+    <div class="card" onclick="startSnake()">
+      <div class="card-title">🐍 Snake</div>
+      <div class="card-tag">Use Arrow Keys</div>
     </div>
 
-    <!-- Game 2: Pacman -->
-    <div class="card" onclick="openGame('https://pacman.com/', 'Pacman')">
-      <img src="https://raw.githubusercontent.com/luciopanepinto/pacman/master/img/pacman.png" alt="Pacman" />
-      <div class="card-body">
-        <div class="card-title">Pacman</div>
-        <div class="card-tag">Retro</div>
-      </div>
+    <div class="card" onclick="startPong()">
+      <div class="card-title">🏓 Pong</div>
+      <div class="card-tag">Mouse or Touch</div>
     </div>
 
-    <!-- Game 3: Snake -->
-    <div class="card" onclick="openGame('https://patorjk.com/games/snake/', 'Snake')">
-      <img src="https://patorjk.com/games/snake/snake.png" alt="Snake" />
-      <div class="card-body">
-        <div class="card-title">Snake</div>
-        <div class="card-tag">Classic</div>
-      </div>
+    <div class="card" onclick="startTTT()">
+      <div class="card-title">❌ Tic-Tac-Toe</div>
+      <div class="card-tag">2-Player Local</div>
     </div>
-
-    <!-- Game 4: Breakout -->
-    <div class="card" onclick="openGame('https://jakesgordon.github.io/javascript-breakout/', 'Breakout')">
-      <img src="https://jakesgordon.github.io/javascript-breakout/breakout.png" alt="Breakout" />
-      <div class="card-body">
-        <div class="card-title">Breakout</div>
-        <div class="card-tag">Arcade</div>
-      </div>
-    </div>
-
-    <!-- Game 5: Asteroids -->
-    <div class="card" onclick="openGame('https://jakesgordon.github.io/javascript-asteroids/', 'Asteroids')">
-      <img src="https://jakesgordon.github.io/javascript-asteroids/asteroids.png" alt="Asteroids" />
-      <div class="card-body">
-        <div class="card-title">Asteroids</div>
-        <div class="card-tag">Retro</div>
-      </div>
-    </div>
-
-    <!-- Game 6: Pong -->
-    <div class="card" onclick="openGame('https://jakesgordon.github.io/javascript-pong/', 'Pong')">
-      <img src="https://jakesgordon.github.io/javascript-pong/pong.png" alt="Pong" />
-      <div class="card-body">
-        <div class="card-title">Pong</div>
-        <div class="card-tag">Classic</div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- Player Modal -->
+  <!-- Game Modal Container -->
   <div class="modal" id="gameModal">
     <div class="modal-content">
       <div class="modal-header">
-        <span id="modalTitle" style="font-weight: bold;">Game</span>
+        <span id="modalTitle" style="font-weight: bold; font-size: 1.2rem;">Game</span>
         <button class="close-btn" onclick="closeGame()">&times;</button>
       </div>
-      <iframe id="gameFrame" src=""></iframe>
+      <div id="gameContainer"></div>
     </div>
   </div>
 
   <script>
-    function openGame(url, title) {
-      document.getElementById('gameFrame').src = url;
-      document.getElementById('modalTitle').innerText = title;
-      document.getElementById('gameModal').style.display = 'flex';
-    }
+    let gameInterval = null;
 
     function closeGame() {
-      document.getElementById('gameFrame').src = '';
+      if (gameInterval) clearInterval(gameInterval);
+      document.getElementById('gameContainer').innerHTML = '';
       document.getElementById('gameModal').style.display = 'none';
     }
 
-    function filterGames() {
-      const q = document.getElementById('searchInput').value.toLowerCase();
-      const cards = document.querySelectorAll('.card');
-      cards.forEach(card => {
-        const title = card.querySelector('.card-title').innerText.toLowerCase();
-        card.style.display = title.includes(q) ? 'block' : 'none';
+    /* --- GAME 1: SNAKE --- */
+    function startSnake() {
+      document.getElementById('modalTitle').innerText = 'Snake';
+      document.getElementById('gameContainer').innerHTML = '<canvas id="gc" width="400" height="400"></canvas>';
+      document.getElementById('gameModal').style.display = 'flex';
+
+      const canvas = document.getElementById('gc');
+      const ctx = canvas.getContext('2d');
+      let px = 10, py = 10, gs = 20, tc = 20, ax = 15, ay = 15, xv = 0, yv = 0;
+      let trail = [], tail = 5;
+
+      document.onkeydown = function(e) {
+        if(e.keyCode===37 && xv!==1) { xv=-1; yv=0; }
+        if(e.keyCode===38 && yv!==1) { xv=0; yv=-1; }
+        if(e.keyCode===39 && xv!==-1) { xv=1; yv=0; }
+        if(e.keyCode===40 && yv!==-1) { xv=0; yv=1; }
+      };
+
+      if (gameInterval) clearInterval(gameInterval);
+      gameInterval = setInterval(function() {
+        px += xv; py += yv;
+        if(px < 0) px = tc-1; if(px > tc-1) px = 0;
+        if(py < 0) py = tc-1; if(py > tc-1) py = 0;
+
+        ctx.fillStyle = "#0f172a"; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "#10b981";
+        for(let i=0; i<trail.length; i++) {
+          ctx.fillRect(trail[i].x*gs, trail[i].y*gs, gs-2, gs-2);
+          if(trail[i].x===px && trail[i].y===py) tail = 5;
+        }
+        trail.push({x:px, y:py});
+        while(trail.length > tail) trail.shift();
+
+        if(ax===px && ay===py) {
+          tail++;
+          ax = Math.floor(Math.random()*tc);
+          ay = Math.floor(Math.random()*tc);
+        }
+        ctx.fillStyle = "#ef4444";
+        ctx.fillRect(ax*gs, ay*gs, gs-2, gs-2);
+      }, 1000/15);
+    }
+
+    /* --- GAME 2: PONG --- */
+    function startPong() {
+      document.getElementById('modalTitle').innerText = 'Pong';
+      document.getElementById('gameContainer').innerHTML = '<canvas id="gc" width="400" height="300"></canvas>';
+      document.getElementById('gameModal').style.display = 'flex';
+
+      const canvas = document.getElementById('gc');
+      const ctx = canvas.getContext('2d');
+      let bx = 200, by = 150, xv = 4, yv = 4, p1 = 120, p2 = 120;
+
+      canvas.addEventListener('mousemove', e => {
+        const rect = canvas.getBoundingClientRect();
+        p1 = e.clientY - rect.top - 30;
       });
+
+      if (gameInterval) clearInterval(gameInterval);
+      gameInterval = setInterval(function() {
+        bx += xv; by += yv;
+        if(by < 0 || by > canvas.height) yv = -yv;
+        if(bx < 0) { bx = 200; by = 150; xv = 4; }
+        if(bx > canvas.width) { bx = 200; by = 150; xv = -4; }
+
+        if(bx < 20 && by > p1 && by < p1 + 60) xv = -xv;
+        if(bx > canvas.width - 20 && by > p2 && by < p2 + 60) xv = -xv;
+
+        p2 += (by - (p2 + 30)) * 0.1; // Simple AI
+
+        ctx.fillStyle = "#0f172a"; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(10, p1, 10, 60);
+        ctx.fillRect(canvas.width - 20, p2, 10, 60);
+        ctx.fillRect(bx-4, by-4, 8, 8);
+      }, 1000/30);
+    }
+
+    /* --- GAME 3: TIC-TAC-TOE --- */
+    function startTTT() {
+      document.getElementById('modalTitle').innerText = 'Tic-Tac-Toe';
+      document.getElementById('gameContainer').innerHTML = '<div id="tttBoard"></div>';
+      document.getElementById('gameModal').style.display = 'flex';
+
+      const board = document.getElementById('tttBoard');
+      let turn = 'X', cells = Array(9).fill('');
+
+      function render() {
+        board.innerHTML = '';
+        cells.forEach((val, idx) => {
+          const div = document.createElement('div');
+          div.className = 'ttt-cell';
+          div.innerText = val;
+          div.onclick = () => {
+            if(!cells[idx]) {
+              cells[idx] = turn;
+              turn = turn === 'X' ? 'O' : 'X';
+              render();
+            }
+          };
+          board.appendChild(div);
+        });
+      }
+      render();
     }
   </script>
 </body>
