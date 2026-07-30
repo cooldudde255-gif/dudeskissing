@@ -104,10 +104,10 @@
       <div class="card-tag">Custom Game</div>
     </div>
 
-    <!-- Game 2: Crazy Mouse Battle -->
-    <div class="card" onclick="openIframe('./crazy-mouse/index.html', 'Crazy Mouse Battle')">
+    <!-- Game 2: Crazy Mouse (Built-In Fix to avoid 404) -->
+    <div class="card" onclick="startCrazyMouse()">
       <div class="card-title">🐭 Crazy Mouse</div>
-      <div class="card-tag">Local Game</div>
+      <div class="card-tag">Built-In Game</div>
     </div>
 
     <!-- Game 3: Clumsy Bird -->
@@ -168,7 +168,48 @@
       document.getElementById('gameModal').style.display = 'flex';
     }
 
-    /* --- BUILT-IN GAME 1: SNAKE --- */
+    /* --- CRAZY MOUSE (BUILT-IN CANVAS GAME) --- */
+    function startCrazyMouse() {
+      document.getElementById('modalTitle').innerText = 'Crazy Mouse - Click the wild mouse!';
+      document.getElementById('gameContainer').innerHTML = '<canvas id="cmCanvas" width="500" height="400"></canvas>';
+      document.getElementById('gameModal').style.display = 'flex';
+
+      const canvas = document.getElementById('cmCanvas');
+      const ctx = canvas.getContext('2d');
+      let score = 0, mX = 250, mY = 200, speedX = 3, speedY = 3, radius = 20;
+
+      canvas.addEventListener('mousedown', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        let clickX = e.clientX - rect.left;
+        let clickY = e.clientY - rect.top;
+        let dist = Math.hypot(clickX - mX, clickY - mY);
+        if(dist < radius) {
+          score += 10;
+          mX = Math.random() * (canvas.width - 40) + 20;
+          mY = Math.random() * (canvas.height - 40) + 20;
+          speedX = (Math.random() - 0.5) * 10;
+          speedY = (Math.random() - 0.5) * 10;
+        }
+      });
+
+      if (gameInterval) clearInterval(gameInterval);
+      gameInterval = setInterval(() => {
+        ctx.fillStyle = "#0f172a"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        mX += speedX; mY += speedY;
+        if(mX < radius || mX > canvas.width - radius) speedX = -speedX;
+        if(mY < radius || mY > canvas.height - radius) speedY = -speedY;
+
+        // Draw Mouse
+        ctx.fillStyle = "#f59e0b"; ctx.beginPath(); ctx.arc(mX, mY, radius, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(mX - 6, mY - 6, 4, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(mX + 6, mY - 6, 4, 0, Math.PI*2); ctx.fill();
+
+        ctx.fillStyle = "#fff"; ctx.font = "16px system-ui"; ctx.fillText(`Score: ${score}`, 15, 25);
+      }, 1000/60);
+    }
+
+    /* --- BUILT-IN GAME: SNAKE --- */
     function startSnake() {
       document.getElementById('modalTitle').innerText = 'Snake (Use Arrow Keys)';
       document.getElementById('gameContainer').innerHTML = '<canvas id="snakeCanvas" width="400" height="400"></canvas>';
@@ -211,7 +252,7 @@
       }, 1000/15);
     }
 
-    /* --- BUILT-IN GAME 2: TIC-TAC-TOE --- */
+    /* --- BUILT-IN GAME: TIC-TAC-TOE --- */
     function startTTT() {
       document.getElementById('modalTitle').innerText = 'Tic-Tac-Toe';
       document.getElementById('gameContainer').innerHTML = '<div id="tttBoard"></div>';
@@ -239,7 +280,7 @@
       render();
     }
 
-    /* --- BUILT-IN GAME 3: BREAKOUT --- */
+    /* --- BUILT-IN GAME: BREAKOUT --- */
     function startBreakout() {
       document.getElementById('modalTitle').innerText = 'Breakout (Move Mouse or Left/Right Keys)';
       document.getElementById('gameContainer').innerHTML = '<canvas id="boCanvas" width="480" height="320"></canvas>';
@@ -306,7 +347,7 @@
       }, 10);
     }
 
-    /* --- BUILT-IN GAME 4: DODGE --- */
+    /* --- BUILT-IN GAME: DODGE --- */
     function startDodge() {
       document.getElementById('modalTitle').innerText = 'Dodge (Move Mouse to Avoid Red Dots)';
       document.getElementById('gameContainer').innerHTML = '<canvas id="dgCanvas" width="400" height="400"></canvas>';
